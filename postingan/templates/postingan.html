@@ -1,0 +1,66 @@
+
+{% extends "_base.html" %}
+{% block navbar %}
+{% include "navbar.html" %}
+{% endblock navbar %}
+{% block content %}
+{% load static %}
+{% include "hello_message.html" %}
+
+<h1 class="text-primary text-4xl font-bold">Diskusi Terbaru</h1>
+<section id="diskusi_baru" class=" grid min-h-screen grid-cols-1 md:grid-cols-3 gap-4 p-4 ">
+    {% for postingan in list_postingan %}
+    {% include "item_post.html" %}
+      {% empty %}
+      <h1 class='text-lg'>Postingan tidak ditemukan</h1>
+    {% endfor %}
+</section>
+<section>
+  {% if page_obj %}
+  <div class="join m-auto mb-24 flex justify-center ">
+    {% if page_obj.has_previous %}
+    <a href="?page=1#diskusi_baru" class="join-item bg-base-100 btn">first</a>
+    <a href="?page={{ page_obj.previous_page_number }}#diskusi_baru" class="join-item bg-base-100 btn">«</a>
+    
+    {% endif %}
+    <button class="join-item bg-base-100 btn">Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}</button>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}#diskusi_baru" class="join-item bg-base-100 btn">»</a>
+    <a href="?page={{ page_obj.paginator.num_pages }}#diskusi_baru" class="join-item bg-base-100 btn">last</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</section>
+
+<div class="diff rounded-lg">
+  <div class="diff-item-1">
+      <div class="bg-primary text-primary-content text-4xl font-black grid place-content-center">Forum Baca Buku</div>
+  </div>
+    <div class="diff-item-2">
+      <div class="bg-base-100 text-4xl font-black text-primary grid place-content-center">Forum Baca Buku</div>
+    </div>
+    <div class="diff-resizer"></div>
+  </div>
+</div>
+
+<section id="disukai"  class='flex flex-col gap-8 my-24'>
+  <h1 class="text-primary text-4xl font-bold">Diskusi Paling disukai</h1>
+  <section class="carousel gap-8">
+    {% for postingan in most_like %}
+    <div class="carousel-item">
+    {% include "item_post.html" %}
+    </div>
+    {% endfor %}
+</section>
+</section>
+
+<section id="populer" class='flex flex-col gap-8' >
+  <h1 class="text-primary text-4xl font-bold">Diskusi Populer</h1>
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 mb-24">
+  
+    {% for postingan in most_comment %}
+    {% include "item_post.html" %}
+    {% endfor %}
+  </section>
+</section>
+{% endblock content %}

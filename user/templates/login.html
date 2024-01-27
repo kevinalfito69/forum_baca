@@ -1,0 +1,41 @@
+{% extends "_base.html" %} {% block content %}
+
+<div class="hero min-h-screen bg-base-100">
+  
+  <div class="hero-content flex-col md:flex-row-reverse">
+    <div class="text-center md:text-left">
+      <h1 class="text-5xl font-bold">Login now!</h1>
+      <p class="py-6">Temukan berbagai diskusi dan pembahasan menarik seputar buku, bacaan dan hal lainnya.</p>
+    </div>
+    
+    <div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+      {% include "alert.html" %}
+      <form class="card-body" method="post" action="{% url "login" %}">
+        {% csrf_token %}
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Username</span>
+          </label>
+          <input type="text" name="username" placeholder="username" class="input input-bordered" required />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Password</span>
+          </label>
+          <input type="password" name="password" placeholder="password" class="input input-bordered" required />
+          <label class="label">
+            <a href="#" class="label-text-alt link link-hover">Forgot password?</a>
+          </label>
+        </div>
+        <div class="form-control mt-6">
+          <button class="btn btn-primary">Login</button>
+        </div>
+        <div class="form-control mt-6 text-center">
+          <p>Belum punya akun? <a href="{% url "register" %}" class="label-text-alt font-bold link link-hover"> Daftar sekarang</a></p>
+          
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

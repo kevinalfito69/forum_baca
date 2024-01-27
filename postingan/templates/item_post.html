@@ -1,0 +1,106 @@
+{% load static %}
+<div class="card lg:card-side bg-base-100 md:max-h-60 shadow-xl relative overflow-hidden">
+  {% if postingan.like.count > 0 %}
+  <div class="badge absolute z-10 bottom-0 left-0 translate-x-1 flex gap-4 -translate-y-3 badge-secondary">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M12 20.325q-.35 0-.712-.125t-.638-.4l-1.725-1.575q-2.65-2.425-4.788-4.812T2 8.15Q2 5.8 3.575 4.225T7.5 2.65q1.325 0 2.5.562t2 1.538q.825-.975 2-1.537t2.5-.563q2.35 0 3.925 1.575T22 8.15q0 2.875-2.125 5.275T15.05 18.25l-1.7 1.55q-.275.275-.637.4t-.713.125" /></svg>
+    Disukai oleh - {{postingan.like.count}} orang
+  </div>
+  {% endif %} {% if postingan.gambar %}
+  <figure class="avatar" ><div class="md:w-40 w-full  rounded-xl"><img src="{{postingan.gambar.url}}" alt="Album" /></div></figure>
+  {% endif %}
+
+  <div class="card-body">
+    <div class='flex gap-2'>
+    
+    
+    <a href="{% url "profile" username=postingan.penulis.username %}" class="text-[0.67rem] text-secondary-content flex items-center gap-1 flex-wrap font-semibold">
+      <div class="avatar">
+        <div class="w-4 rounded-full ">
+          {% if postingan.penulis.userprofile.profile_picture %}
+          <img src="{{postingan.penulis.userprofile.profile_picture.url}}" />
+          {% else %}
+          <img src="{% static "assets/profile.jpg" %}" />
+          {% endif %}
+        </div>
+      </div>
+      {{postingan.penulis.first_name}}
+      <span>
+      {% if postingan.penulis.is_staff %}
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-sky-500 inline" viewBox="0 0 24 24">
+        <path
+          d="M10.007 2.104a3 3 0 0 0-3.595 1.49L5.606 5.17a1 1 0 0 1-.436.436l-1.577.806a3 3 0 0 0-1.49 3.595l.546 1.685a1 1 0 0 1 0 .616l-.545 1.685a3 3 0 0 0 1.49 3.595l1.576.806a1 1 0 0 1 .436.436l.806 1.577a3 3 0 0 0 3.595 1.49l1.685-.546a1 1 0 0 1 .616 0l1.685.545a3 3 0 0 0 3.595-1.489l.806-1.577a1 1 0 0 1 .436-.436l1.577-.805a3 3 0 0 0 1.49-3.596l-.546-1.685a1 1 0 0 1 0-.616l.545-1.685a3 3 0 0 0-1.489-3.595l-1.577-.806a1 1 0 0 1-.436-.436l-.805-1.577a3 3 0 0 0-3.596-1.49l-1.685.546a1 1 0 0 1-.616 0zM6.76 11.757l1.414-1.414l2.828 2.829l5.657-5.657l1.415 1.414l-7.072 7.07z" />
+      </svg>
+      {% endif %}
+      {% if postingan.penulis.is_superuser %}
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-yellow-500 inline" viewBox="0 0 256 256"><path  d="m235.39 84.07l-28.15 24l8.43 35.73a13.09 13.09 0 0 1-5 13.58a13.25 13.25 0 0 1-14.63.7l-32-19l-32 19a13.25 13.25 0 0 1-14.63-.7a13.1 13.1 0 0 1-5-13.58l8.43-35.73l-28.16-24A13.13 13.13 0 0 1 100.1 61l37.23-3.15L151.85 24a13.24 13.24 0 0 1 24.31 0l14.52 33.87L227.9 61a13.12 13.12 0 0 1 7.49 23.06ZM85.66 114.34a8 8 0 0 0-11.32 0l-56 56a8 8 0 0 0 11.32 11.32l56-56a8 8 0 0 0 0-11.32m16 56a8 8 0 0 0-11.32 0l-56 56a8 8 0 0 0 11.32 11.32l56-56a8 8 0 0 0 0-11.32m60.69 0l-56 56a8 8 0 0 0 11.32 11.32l56-56a8 8 0 0 0-11.31-11.32Z"/></svg>
+      {% endif %}
+    </span>
+      <span class="font-normal">@{{postingan.penulis.username|truncatechars:10}}</span><time> · {{postingan.tanggal_dibuat|date:"d M Y" }}</time>
+    </a>
+  </div>
+    <h2 class="card-title text-base">{{postingan.judul|truncatechars:20}}</h2>
+
+    <p class="text-xs">{{ postingan.konten|truncatechars:50|striptags|safe }}</p>
+
+    <div class="flex justify-end gap-2 items-baseline">
+      <a title="dikomentari sebanyak {{postingan.komentar.count}} orang" href="{% url 'detail-postingan' slug=postingan.slug %}#komentar" class="indicator btn btn-circle btn-sm  backdrop-blur-sm">
+        {% if postingan.komentar.count > 0 %}
+        <span class="indicator-item badge badge-xs indicator-top indicator-end badge-secondary">{{postingan.komentar.count}}</span>
+        {% endif %}
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256"><path fill="currentColor" d="M132 24A100.11 100.11 0 0 0 32 124v84.33A15.69 15.69 0 0 0 47.67 224H132a100 100 0 0 0 0-200m0 184H48v-84a84 84 0 1 1 84 84m12-80a12 12 0 1 1-12-12a12 12 0 0 1 12 12m-44 0a12 12 0 1 1-12-12a12 12 0 0 1 12 12m88 0a12 12 0 1 1-12-12a12 12 0 0 1 12 12" /></svg>
+      
+    </a>
+      {% if user.is_authenticated %}
+      <form method="post" action="{% url "toggle-like" post_id=postingan.id %}">
+        {% csrf_token %}
+        {% if user in postingan.like.all %}
+        <button class='btn btn-circle btn-sm text-red-500'  type="submit" value='{{postingan.id}}'><svg xmlns="http://www.w3.org/2000/svg" class='h-4 w-4' viewBox="0 0 24 24"><path fill="currentColor" d="M12 20.325q-.35 0-.712-.125t-.638-.4l-1.725-1.575q-2.65-2.425-4.788-4.812T2 8.15Q2 5.8 3.575 4.225T7.5 2.65q1.325 0 2.5.562t2 1.538q.825-.975 2-1.537t2.5-.563q2.35 0 3.925 1.575T22 8.15q0 2.875-2.125 5.275T15.05 18.25l-1.7 1.55q-.275.275-.637.4t-.713.125"/></svg></button>
+        {% else %}
+        <button class='btn btn-circle btn-sm' type="submit" value='{{postingan.id}}'><svg xmlns="http://www.w3.org/2000/svg" class='h-4 w-4 fill-secondary' viewBox="0 0 24 24"><path fill="currentColor" d="M12 20.325q-.35 0-.712-.125t-.638-.4l-1.725-1.575q-2.65-2.425-4.788-4.812T2 8.15Q2 5.8 3.575 4.225T7.5 2.65q1.325 0 2.5.562t2 1.538q.825-.975 2-1.537t2.5-.563q2.35 0 3.925 1.575T22 8.15q0 2.875-2.125 5.275T15.05 18.25l-1.7 1.55q-.275.275-.637.4t-.713.125M11.05 6.75q-.725-1.025-1.55-1.563t-2-.537q-1.5 0-2.5 1t-1 2.5q0 1.3.925 2.763t2.213 2.837q1.287 1.375 2.65 2.575T12 18.3q.85-.775 2.213-1.975t2.65-2.575q1.287-1.375 2.212-2.837T20 8.15q0-1.5-1-2.5t-2.5-1q-1.175 0-2 .538T12.95 6.75q-.175.25-.425.375T12 7.25q-.275 0-.525-.125t-.425-.375m.95 4.725"/></svg></button>
+        {% endif %}
+        
+      </form>
+      {% endif %}
+      <a href="{% url 'detail-postingan' slug=postingan.slug %}" class="btn btn-sm btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 256 256">
+          <path
+            fill="currentColor"
+            d="m210.78 39.25l-130.25-23A16 16 0 0 0 62 29.23l-29.75 169a16 16 0 0 0 13 18.53l130.25 23a16 16 0 0 0 18.54-13l29.75-169a16 16 0 0 0-13.01-18.51M178.26 224L48 201L77.75 32L208 55ZM89.34 58.42a8 8 0 0 1 9.27-6.48l83 14.65a8 8 0 0 1-1.39 15.88a8.36 8.36 0 0 1-1.4-.12l-83-14.66a8 8 0 0 1-6.48-9.27M83.8 89.94a8 8 0 0 1 9.27-6.49l83 14.66a8 8 0 0 1-1.4 15.89a7.55 7.55 0 0 1-1.41-.13l-83-14.65a8 8 0 0 1-6.46-9.28m-5.55 31.51a8 8 0 0 1 9.27-6.45l41.48 7.29a8 8 0 0 1-1.38 15.88a8.27 8.27 0 0 1-1.4-.12l-41.5-7.33a8 8 0 0 1-6.47-9.27" />
+        </svg>
+        Read More
+      </a>
+      {% comment %} <button class="like-button" data-post-id="{{ postingan.id }}" data-csrf-token="{% csrf_token %}">Like</button>
+      <span class="likes-count">{{ postingan.like.count }}</span> {% endcomment %}
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var likeButtons = document.querySelectorAll('.like-button');
+
+    likeButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        var postId = button.getAttribute('data-post-id');
+        var csrfToken = button.getAttribute('data-csrf-token');
+
+        axios
+          .post('/toggle-like/' + postId + '/', { csrfmiddlewaretoken: csrfToken })
+          .then(function (response) {
+            var data = response.data;
+
+            if (data.liked) {
+              likeButtons.innerHtml = 'Like';
+            } else {
+              // Handle tampilan ketika like dihapus
+              likeButtons.innerHtml = 'Unlike';
+            }
+            document.querySelector('.likes-count').innerText = data.likes_count;
+          })
+          .catch(function (error) {
+            console.error('Error:', error);
+          });
+      });
+    });
+  });
+</script>

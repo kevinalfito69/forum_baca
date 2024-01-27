@@ -1,0 +1,8 @@
+{% extends "_base.html" %}{% block navbar %}{% include "navbar.html" %}{% endblock navbar %} {% block content %}
+<h1 class="text-primary text-4xl font-bold mt-20">Cari Diskusi</h1>
+<section id="diskusi_baru" class="grid min-h-screen grid-cols-1 md:grid-cols-3 gap-4 p-4">
+  {% for postingan in list_postingan %} {% include "item_post.html" %} {% empty %}
+  <h1 class="text-lg">Diskusi tidak ditemukan</h1>
+  {% endfor %}
+</section>
+{% endblock content %}

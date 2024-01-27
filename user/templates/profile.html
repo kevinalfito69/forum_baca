@@ -1,0 +1,207 @@
+{% extends "_base.html" %} {% load static %} {% block title %}{{detail_user.username}}|Profile{% endblock title %} {% block navbar %}
+<nav class="navbar bg-base-100">
+  <div class="navbar-start">
+    <a class="btn btn-ghost text-xl" href="/"
+      ><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline-block" viewBox="0 0 24 24"><path fill="currentColor" d="m9.55 12l7.35 7.35q.375.375.363.875t-.388.875q-.375.375-.875.375t-.875-.375l-7.7-7.675q-.3-.3-.45-.675t-.15-.75q0-.375.15-.75t.45-.675l7.7-7.7q.375-.375.888-.363t.887.388q.375.375.375.875t-.375.875z" /></svg>Back</a
+    >
+  </div>
+  <div class="navbar-center">
+    <h1 class="font-bold">Profile</h1>
+  </div>
+
+  <div class="navbar-end">
+    {% if detail_user.username == request.user.username %}
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn m-1">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
+      </div>
+      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+        <li>
+          <a onclick="my_modal_3.showModal()" class="text-success">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M3 21v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15q.4 0 .775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM17.6 7.8L19 6.4L17.6 5l-1.4 1.4z" /></svg> Edit Profil</a>
+        </li>
+        <li>
+          <a onclick="my_modal_password.showModal()" class="text-warning">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M7 18q-2.5 0-4.25-1.75T1 12q0-2.5 1.75-4.25T7 6q2.025 0 3.538 1.138T12.65 10H21q.825 0 1.413.588T23 12q0 .9-.625 1.45T21 14v2q0 .825-.587 1.413T19 18q-.825 0-1.412-.587T17 16v-2h-4.35q-.6 1.725-2.113 2.863T7 18m0-4q.825 0 1.413-.587T9 12q0-.825-.587-1.412T7 10q-.825 0-1.412.588T5 12q0 .825.588 1.413T7 14"/></svg> Change Password</a>
+        </li>
+      </ul>
+    </div>
+    <dialog id="my_modal_password" class="modal">
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <form action="{% url "change_password" username=request.user.username %}" class="flex flex-col gap-4" x-data="{password:'',confirmPasword:''}" method="post">
+          {% csrf_token %}
+          <h3 class="font-bold text-lg">Edit Passord</h3>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Password Sekarang</span>
+            </div>
+            <input name="curent_password" type="password" required class="input input-bordered input-primary input-sm md:input-md w-full" />
+          </label>
+
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Password Baru</span>
+            </div>
+            <input name="password" type="password" x-model='password' required class="input input-bordered input-primary input-sm md:input-md w-full" />
+            <div class="label"><span class="label-text-alt">Panjang password minimal 8 karakter.</span></div>
+          </label>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Konfirmasi Password</span>
+              
+            </div>
+            <input name="confirm_password" x-model='confirmPasword' type="password" required :class="password !== confirmPasword ? 'input-error' : '' " class="input input-bordered input-primary input-sm md:input-md w-full" />
+            <div class="label" x-show="password !== confirmPasword" ><span class="label-text-alt text-error">Password Tidak sama</span></div>
+          </label>
+
+          <button class="btn btn-primary"  x-bind:disabled="password.length <= 8 || password!==confirmPasword" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M7 18q-2.5 0-4.25-1.75T1 12q0-2.5 1.75-4.25T7 6q2.025 0 3.538 1.138T12.65 10H21q.825 0 1.413.588T23 12q0 .9-.625 1.45T21 14v2q0 .825-.587 1.413T19 18q-.825 0-1.412-.587T17 16v-2h-4.35q-.6 1.725-2.113 2.863T7 18m0-4q.825 0 1.413-.587T9 12q0-.825-.587-1.412T7 10q-.825 0-1.412.588T5 12q0 .825.588 1.413T7 14"/></svg>
+            Edit Password
+          </button>
+
+        </form>
+        <p>Tekan ESC key atau click pada tombol ✕ untuk menutup</p>
+      </div>
+    </dialog>
+    {% comment %} modal {% endcomment %}
+    <dialog id="my_modal_3" class="modal">
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <form action="" class="flex flex-col gap-4" method="post">
+          {% csrf_token %}
+          <h3 class="font-bold text-lg">Edit Profil</h3>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Username</span>
+            </div>
+            <input name="username" type="text" required placeholder="Masukan username" class="input input-bordered input-primary input-sm md:input-md w-full" value="{{detail_user.username}}" />
+          </label>
+
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Full Name</span>
+            </div>
+            <input type="text" name="name" required placeholder="Masukan nama" class="input input-bordered input-primary input-sm md:input-md w-full" value="{{detail_user.first_name}}" />
+          </label>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Email</span>
+            </div>
+            <input type="email" name="email" required placeholder="Masukan nama" class="input input-bordered input-primary input-sm md:input-md w-full" value="{{detail_user.email}}" />
+          </label>
+
+          <button class="btn" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H6q-.425 0-.712-.288T5 12q0-.425.288-.712T6 11h5V6q0-.425.288-.712T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.712-.288T11 18z" /></svg>
+            Edit profile
+          </button>
+        </form>
+        <p>Tekan ESC key atau click pada tombol ✕ untuk menutup</p>
+      </div>
+    </dialog>
+    {% comment %} modal image {% endcomment %}
+    <dialog id="my_modal_image" class="modal">
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        
+        <form id="profileForm"  action="{% url "change_profile_picture" username=detail_user.username %}" class="flex flex-col gap-4" enctype="multipart/form-data" method="post">
+          {% csrf_token %}
+          <h3 class="font-bold text-lg">Profile Image</h3>
+          <figure class="avatar m-auto">
+            <div class="w-32 h-32 ring ring-offset-4">
+              {% if detail_user.userprofile.profile_picture %}
+              <img src="{{ detail_user.userprofile.profile_picture.url }}" />
+              {% else %}
+              <img src="{% static "assets/profile.jpg" %}" alt="{{detail_user.username}}" />
+              {% endif %}
+            </div>
+          </figure>
+          <div class="flex flex-col gap-4">
+            
+            <label for="profile_image" class="btn btn-primary">Change Photo Profile</label>
+          
+            <button type="button" class="btn btn-error btn-outline" onclick="deleteProfilePicture()" >Delete Profile Picture</button>
+          </div>
+          <input type="file" onchange="submitProfilePictureForm()" id="profile_image" name="profile_image" class="hidden" />
+
+        </form>
+        <p>Tekan ESC key atau click pada tombol ✕ untuk menutup</p>
+      </div>
+    </dialog>
+    {% endif %}
+  </div>
+</nav>
+{% endblock navbar %}{% block content %} {% include "alert.html" %}
+
+<section class="flex bg-base-100 gap-4 rounded-2xl flex-col items-center my-4 py-20  shadow-lg p-8">
+  <div class="grid grid-cols-2 justify-center items-center">
+    <figure class="avatar m-auto">
+      {% if detail_user == request.user %}
+      <button class="btn btn-warning btn-circle absolute right-0 z-10 btn-sm" onclick="my_modal_image.showModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M3 21v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15q.4 0 .775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM17.6 7.8L19 6.4L17.6 5l-1.4 1.4z"/></svg>
+      </button>
+      
+      {% endif %}
+      <figure class="avatar m-auto">
+        <div class="w-32 h-32 rounded-full ring ring-primary">
+          {% if detail_user.userprofile.profile_picture %}
+          <img src="{{ detail_user.userprofile.profile_picture.url }}" />
+          {% else %}
+          <img src="{% static "assets/profile.jpg" %}" alt="{{detail_user.username}}" />
+          {% endif %}
+        </div>
+      </figure>
+    </figure>
+    <div class="grid">
+      
+      <div class="flex gap-4">
+      
+        <h1 class="text-4xl font-bold items-center">{{detail_user.first_name}}
+          <span>
+            {% if detail_user.is_staff %}
+            <div class="tooltip tooltip-bottom" data-tip="Staff">
+            <svg  xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-sky-500 inline" viewBox="0 0 24 24">
+              <path
+                d="M10.007 2.104a3 3 0 0 0-3.595 1.49L5.606 5.17a1 1 0 0 1-.436.436l-1.577.806a3 3 0 0 0-1.49 3.595l.546 1.685a1 1 0 0 1 0 .616l-.545 1.685a3 3 0 0 0 1.49 3.595l1.576.806a1 1 0 0 1 .436.436l.806 1.577a3 3 0 0 0 3.595 1.49l1.685-.546a1 1 0 0 1 .616 0l1.685.545a3 3 0 0 0 3.595-1.489l.806-1.577a1 1 0 0 1 .436-.436l1.577-.805a3 3 0 0 0 1.49-3.596l-.546-1.685a1 1 0 0 1 0-.616l.545-1.685a3 3 0 0 0-1.489-3.595l-1.577-.806a1 1 0 0 1-.436-.436l-.805-1.577a3 3 0 0 0-3.596-1.49l-1.685.546a1 1 0 0 1-.616 0zM6.76 11.757l1.414-1.414l2.828 2.829l5.657-5.657l1.415 1.414l-7.072 7.07z" />
+            </svg>
+          </div>
+            {% endif %}
+            {% if detail_user.is_superuser %}
+            <div class="tooltip tooltip-bottom" data-tip="Developer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-yellow-500 inline" viewBox="0 0 256 256"><path  d="m235.39 84.07l-28.15 24l8.43 35.73a13.09 13.09 0 0 1-5 13.58a13.25 13.25 0 0 1-14.63.7l-32-19l-32 19a13.25 13.25 0 0 1-14.63-.7a13.1 13.1 0 0 1-5-13.58l8.43-35.73l-28.16-24A13.13 13.13 0 0 1 100.1 61l37.23-3.15L151.85 24a13.24 13.24 0 0 1 24.31 0l14.52 33.87L227.9 61a13.12 13.12 0 0 1 7.49 23.06ZM85.66 114.34a8 8 0 0 0-11.32 0l-56 56a8 8 0 0 0 11.32 11.32l56-56a8 8 0 0 0 0-11.32m16 56a8 8 0 0 0-11.32 0l-56 56a8 8 0 0 0 11.32 11.32l56-56a8 8 0 0 0 0-11.32m60.69 0l-56 56a8 8 0 0 0 11.32 11.32l56-56a8 8 0 0 0-11.31-11.32Z"/></svg>
+          </div>
+            {% endif %}
+          </span>
+        </h1>
+        {% if user != detail_user %}
+        <form action="{% url "follow" user_id=detail_user.id username=detail_user.username %}" method="post" >
+          {% csrf_token %}
+        <button class="btn btn-primary btn-sm">  {% if following %}
+          Unfollow
+      {% else %}
+          Follow
+      {% endif %}</button>
+    </form>
+    {% endif %}
+  </div>
+    
+      <h3 class="text-gray-600">@{{detail_user.username}}</h3>
+      <div class="divider"></div> 
+      <ul class="flex gap-4  font-bold">
+        <li><a class="link-primary " href="#userpost">Postingan {{postingan.count}}</a>
+        <li><a href="{% url "following_list" username=detail_user.username %}"  class="link-primary ">Diikuti {{detail_user.userprofile.following.count}}</a>
+        <li><a href="{% url "follower_list" username=detail_user.username %}" class="link-primary ">Pengikut {{detail_user.userprofile.follower.count}}</a>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="userpost" class="flex flex-col gap-4"><h1 class="text-4xl text-primary font-bold">Postingan {{detail_user.first_name}}</h1>
+  <div class="divider"></div>
+  {% for postingan in postingan %} {% include "item_post.html" %} {% endfor %}</section>
+{% endblock content %}

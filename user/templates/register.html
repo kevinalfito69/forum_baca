@@ -1,0 +1,73 @@
+
+
+{% extends "_base.html" %}
+{% block content %}
+{% include "alert.html" %}
+    <div class="hero min-h-screen bg-base-200">
+      <div class="hero-content flex-col lg:flex-row-reverse">
+        <div class="text-center lg:text-left">
+          <h1 class="text-5xl font-bold">Register now!</h1>
+          <p class="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
+        </div>
+        <div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+          <form class="card-body" action="{% url "register" %}" method="post">
+            {% csrf_token %}
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Name</span>
+              </label>
+              <input type="text" placeholder="Your name" name="name" class="input input-bordered" required />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Create Username</span>
+              </label>
+              <input type="text" placeholder="username" name="username" class="input input-bordered" required />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Email</span>
+              </label>
+              <input type="email" placeholder="email" name="email" class="input input-bordered" required />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Password</span>
+              </label>
+              <input type="password" oninput="checkPasswords()" placeholder="password" id='password' name="password" class="input input-bordered" required />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Confirm Password</span>
+              </label>
+              <input type="password" oninput="checkPasswords()" name="confirm_password" id='checkPassword' placeholder="confirm password" class="input input-bordered input-error " required />
+            </div>
+            <div class="form-control mt-6">
+              <button disabled id="registerBtn" class="btn btn-primary">Register</button>
+            </div>
+            <div class="form-control mt-6 text-center">
+              <p>Sudah punya akun? <a href="#" class="label-text-alt font-bold link link-hover"> Login sekarang</a></p>
+              
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      function checkPasswords() {
+        var passwordA = document.getElementById('password');
+        var passwordB = document.getElementById('checkPassword');
+        var submitButton = document.getElementById('registerBtn');
+    
+        if (passwordA.value === passwordB.value && passwordA.value !== '' && passwordB.value !== '') {
+            // Jika passwordA dan passwordB sama, dan keduanya tidak kosong
+            submitButton.disabled = false; // Aktifkan tombol
+        } else {
+            // Jika passwordA dan passwordB tidak sama, atau salah satu kosong
+            submitButton.disabled = true; // Nonaktifkan tombol
+            passwordB.classList.add('input-error')
+        }
+    }
+    </script>
+{% endblock content %}
